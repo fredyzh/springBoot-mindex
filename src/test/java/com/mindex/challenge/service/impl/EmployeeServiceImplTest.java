@@ -1,6 +1,8 @@
 package com.mindex.challenge.service.impl;
 
+import com.mindex.challenge.data.Compensation;
 import com.mindex.challenge.data.Employee;
+import com.mindex.challenge.data.ReportingStructure;
 import com.mindex.challenge.service.EmployeeService;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,12 +20,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.Date;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class EmployeeServiceImplTest {
 
     private String employeeUrl;
     private String employeeIdUrl;
+    private String employeeStructureUrl;
+    private String compensationUrl;
 
     @Autowired
     private EmployeeService employeeService;
@@ -38,6 +44,8 @@ public class EmployeeServiceImplTest {
     public void setup() {
         employeeUrl = "http://localhost:" + port + "/employee";
         employeeIdUrl = "http://localhost:" + port + "/employee/{id}";
+        employeeStructureUrl = "http://localhost:" + port + "/employee/reportEmployeeStructure/{id}";
+        compensationUrl= "http://localhost:" + port + "/employee/createCompensation";
     }
 
     @Test
@@ -47,6 +55,8 @@ public class EmployeeServiceImplTest {
         testEmployee.setLastName("Doe");
         testEmployee.setDepartment("Engineering");
         testEmployee.setPosition("Developer");
+        
+        Compensation compensation=new Compensation(testEmployee, "20000", new Date());
 
         // Create checks
         Employee createdEmployee = restTemplate.postForEntity(employeeUrl, testEmployee, Employee.class).getBody();
@@ -59,7 +69,14 @@ public class EmployeeServiceImplTest {
         Employee readEmployee = restTemplate.getForEntity(employeeIdUrl, Employee.class, createdEmployee.getEmployeeId()).getBody();
         assertEquals(createdEmployee.getEmployeeId(), readEmployee.getEmployeeId());
         assertEmployeeEquivalence(createdEmployee, readEmployee);
-
+        
+        //report structure
+       // ReportingStructure reportingStructure = restTemplate.getForEntity(employeeStructureUrl, ReportingStructure.class, createdEmployee.getEmployeeId()).getBody();
+       // assertNotNull(reportingStructure.getNumberOfReports());
+        
+        // Create compensation
+		 Compensation compensationCreated =restTemplate.postForEntity(compensationUrl, compensation, Compensation.class).getBody();
+		 assertNotNull(compensationCreated.getSalary());
 
         // Update checks
         readEmployee.setPosition("Development Manager");
