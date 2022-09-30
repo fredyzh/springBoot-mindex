@@ -14,6 +14,7 @@ public class ReportingStructure {
 
 	/**
 	 * only constructor to populate report number
+	 * 
 	 * @param employee
 	 */
 	public ReportingStructure(Employee employee) {

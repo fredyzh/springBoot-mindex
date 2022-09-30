@@ -10,7 +10,19 @@ public interface EmployeeService {
 
 	Employee update(Employee employee);
 
+	/**
+	 * create compensation
+	 * 
+	 * @param compensation
+	 * @return
+	 */
 	Compensation createCompensation(Compensation compensation);
 
+	/**
+	 * retrieve compensation by employee id
+	 * 
+	 * @param empid
+	 * @return
+	 */
 	Compensation getCompensationByEmployeeId(String empid);
 }
