@@ -56,6 +56,23 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public Compensation createCompensation(Compensation compensation) {
 		LOG.debug("Creating createCompensation [{}]", compensation);
+		
+		if(compensation.getEmployee()==null || compensation.getEmployee().getEmployeeId()==null) {
+			throw new RuntimeException("Invalid employee");
+		}
+
+		Employee employee = employeeRepository.findByEmployeeId(compensation.getEmployee().getEmployeeId());
+
+		/**
+		 * depends on business requirement 
+		 * if (employee == null) {
+		 * compensation.getEmployee().setEmployeeId(UUID.randomUUID().toString());
+		 * employeeRepository.insert(employee); }
+		 */
+
+		if (employee == null) {
+			throw new RuntimeException("unable to find employee, please create employee first.");
+		}
 
 		compensationRepository.insert(new CompensationEntity(compensation.getEmployee().getEmployeeId(),
 				compensation.getSalary(), compensation.getEffectiveDate()));
