@@ -2,10 +2,13 @@ package com.mindex.challenge.data;
 
 import java.util.Date;
 
+import org.springframework.data.annotation.Transient;
+
 /*
  * data obj for employee compensation
  */
 public class Compensation {
+	@Transient
 	private Employee employee;
 	private String salary;
 	private Date effectiveDate;
